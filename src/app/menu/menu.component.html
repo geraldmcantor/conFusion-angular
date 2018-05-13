@@ -14,16 +14,12 @@
             Note that I am using the latest version of Angular and as such, md-* tags are replaced by mat-* tags.
         -->
         <mat-grid-list cols="2" rowHeight="200px">
-            <mat-grid-tile *ngFor="let dish of dishes" (click)="onSelect(dish)">
+            <mat-grid-tile *ngFor="let dish of dishes" [routerLink]="['/dishdetail',dish.id]">
                 <img height="200px" src={{dish.image}} alt={{dish.name}}>
                 <mat-grid-tile-footer>
                     <h1 mat-line>{{dish.name | uppercase}}</h1>
                 </mat-grid-tile-footer>
             </mat-grid-tile>
         </mat-grid-list>
-    </div>
-
-    <div fxFlex *ngIf="selectedDish">
-        <app-dishdetail [dish]="selectedDish"></app-dishdetail>
     </div>
 </div>
