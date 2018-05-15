@@ -1,3 +1,7 @@
+<!-- 
+    Note that I am using the latest version of Angular and there all md-* tags are mat-*
+-->
+
 <div class="container"
      fxLayout="row"
      fxLayout.sm="column"
@@ -30,6 +34,19 @@
   <mat-card-content>
     <p>{{promotion.description}}
     </p>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="leader" fxFlex>
+  <mat-card-header>
+    <div mat-card-avatar></div>
+    <mat-card-title>
+      <h3>{{leader.name | uppercase}} {{leader.abbr | uppercase}}</h3>
+    </mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src={{leader.image}} alt={{leader.name}}>
+  <mat-card-content>
+    <p>{{leader.description}}</p>
   </mat-card-content>
 </mat-card>
 
