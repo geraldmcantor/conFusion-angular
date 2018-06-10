@@ -6,11 +6,8 @@
      fxLayoutGap="10px" 
      fxLayoutGap.xs="0">
 
-    <div fxFlex="40" *ngIf="dish">
-        <div fxFlex> 
-            <!--
-                Note that I am using the latest version of Angular and as such, md-* tags are replaced by mat-* tags.
-            -->
+    <div fxFlex="40" *ngIf="dish"> <!-- Top level div for dish detail -->
+        <div fxFlex> <!-- Dish images -->
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>
@@ -30,27 +27,60 @@
                 </mat-card-actions>
             </mat-card>
         </div>
-        <div [hidden]="dish">
-            <mat-spinner></mat-spinner><h4>Loading ... Please Wait</h4>
+        <div fxFlex>
+            <mat-list *ngIf="dish">
+                <h3>COMMENTS</h3>
+                <div *ngFor="let comment of dish.comments">
+                    <mat-list-item>
+                        <p mat-line>{{comment.comment}}</p>
+                        <p mat-line>{{comment.rating}} Stars</p>
+                        <p mat-line>-- {{comment.author}} {{comment.date | date}}</p>
+                    </mat-list-item>
+               </div>
+               <div *ngIf="!commentForm.invalid">
+                   <mat-list-item>
+                       <p mat-line>{{commentForm.value.comment}}</p>
+                       <p mat-line>{{commentForm.value.rating}} Stars</p>
+                       <p mat-line>-- {{commentForm.value.author}}</p>
+                   </mat-list-item>
+               </div>
+            </mat-list>
         </div>
-    </div>
-
-    <div fxFlex="40">
-        <div fxFlex *ngIf="dish">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>
-                        <h3>COMMENTS</h3>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content *ngFor="let comment of dish.comments">
-                    <blockquote>
-                        <p>{{comment.comment}}</p>
-                        <p>{{comment.rating}} Stars</p>
-                        <p>-- {{comment.author}} {{comment.date | date}}</p>
-                    </blockquote>
-                </mat-card-content>
-            </mat-card>
+        <div fxFlex> <!-- Comment form -->
+        	<form novalidate [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+                <table>
+                    <tr>
+                    <td>
+                    <mat-form-field class="full-width" color="{{(formErrors.author) ? 'warn' : 'primary'}}"> 
+                        <input matInput formControlName="author" placeholder="Author" type="text" required>
+                        <mat-hint>
+                            <span [hidden]="!(formErrors.author)">
+                                {{formErrors.author}}
+                            </span>
+                        </mat-hint>
+                    </mat-form-field>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>
+                    <mat-slider formControlName="rating" min="1" max="5" step="1" value="5" thumbLabel tickInterval="1"></mat-slider>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>
+                    <mat-form-field class="full-width" color="{{(formErrors.comment) ? 'warn' : 'primary'}}">
+                        <textarea matInput formControlName="comment" placeholder="Comment" rows=12></textarea>
+                        <mat-hint>
+                            <span [hidden]="!(formErrors.comment)">
+                                {{formErrors.comment}}
+                            </span>
+                        </mat-hint>
+                    </mat-form-field>
+                    </td>
+                    </tr>
+                </table>
+                <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="commentForm.invalid">Submit</button>
+            </form>
         </div>
         <div [hidden]="dish">
             <mat-spinner></mat-spinner><h4>Loading ... Please Wait</h4>
